@@ -1,0 +1,38 @@
+#!/bin/sh
+#
+# Start murena gpio power off
+#
+
+NAME=murena
+PIN_NAME=260
+
+case "$1" in
+  start)
+    echo 271 > /sys/class/gpio/export
+    echo 1 > /sys/class/gpio/gpio271/active_low
+    echo out > /sys/class/gpio/gpio271/direction
+    echo 1 > /sys/class/gpio/gpio271/value
+    printf "Starting $NAME: "
+    /usr/sbin/murena & 
+    ;;
+  stop)
+    printf "Stopping $NAME: "
+    killall murena
+    echo $PIN_NAME > /sys/class/gpio/unexport
+    echo 277 > /sys/class/gpio/unexport
+    ;;
+  restart|reload)
+    echo "Restarting $NAME: "
+    $0 stop
+    sleep 1
+    $0 start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|reload}" >&2
+    exit 1
+    ;;
+esac
+
+exit 0
+
+
