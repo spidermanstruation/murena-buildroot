@@ -2,7 +2,7 @@
 
 This repository contains a Buildroot config extension. That means fully building the U-Boot image, Linux kernel, the rootfs image and the final partitioned binary image for flashing onto the bootable SD card.
 
-There was reasonable effort to keep config files readable, e.g. here is the main Buildroot defconfig file: [configs/nuc970_murena_defconfig](configs/nuc970_murena_defconfig).
+Buildroot defconfig file: [configs/nuc970_murena_defconfig](configs/nuc970_murena_defconfig).
 
 ## Building the Image
 
@@ -44,4 +44,9 @@ make
 
 The build may take 1.5 hours on a decent machine, or longer. 
 
-A successful build will produce a `output/images` folder. That folder contains all essential images (uImage, rootfs.tar.gz, u-boot.bin) that can now be written to the bootable SD card.
+A successful build will produce a `output/images` folder. That folder contains all essential images (uImage, rootfs.tar, u-boot.bin, sdcard.img) that can now be written to the bootable SD card and to Murena Board SPI-Flash memory.
+
+Use Nu Writer to write SPI-Flash. Make a bootble SDCard with dd command:
+```sh
+sudo dd if=output/images/sdcard.img of=/dev/sdX bs=1M; sync
+```
